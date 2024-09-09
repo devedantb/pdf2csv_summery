@@ -1,0 +1,9 @@
+.idx
+.venv
+*.pdf
+*.csv
+test.py
+.env
+.sqlite3
+__pycache__
+migrations
