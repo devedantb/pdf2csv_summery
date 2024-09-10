@@ -19,7 +19,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('pdf-to-csv/', include('app_pdf_csv_processing.urls')),
-    # path('doc-summery/', include('app_doc_summarization.urls')),
+    path('doc-summery/', include('app_doc_summarization.urls')),
     path('admin/', admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
 ]

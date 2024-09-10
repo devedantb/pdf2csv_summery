@@ -14,7 +14,7 @@ from csv2summery.csv2json import make_json
 from .models import DocumentData
 
 # Create your views here.
-def get_summery_from_json(json_file_path, question:str, llm=llm):
+def get_summery_from_json(json_file_path, question:str=None, llm=llm):
     question = '''Please provide a brief summary of the JSON file, 
             including its main content and purpose, 
             so that someone can understand the data without opening the file. 
@@ -42,11 +42,9 @@ def get_json_data(json_file_path:str):
     with open(json_file_path, 'r') as file:
         # Load the JSON data
         json_data = json.load(file)
-    return json_data
+    return json_data if json_data else None
 
 def index(request):
-    get_data = DocumentData.objects.all()
-    print(get_data)
     if request.method=='POST':
         pdf_file = request.FILES["files"]
         contents = pdf_file.read()
@@ -57,30 +55,30 @@ def index(request):
         csv_path = os.path.join(BASE_DIR, csv_file_name)
         
         convert_pdf2csv(pdf_path=pdf_path, csv_path=csv_path)
-        os.remove(pdf_path)
-        print(f'CSV PATH >>>>> {csv_path}')
-
+        os.remove(pdf_path) # removing pdf files as those are tempo
         json_file_name = str(pdf_file).replace('.pdf','.json')
         json_file_name = f'app_pdf_csv_processing/json_data/{str(json_file_name)}'
         json_file_path = os.path.join(BASE_DIR, json_file_name)
 
+        pk = 1
         try:
             make_json(csv_path, json_file_path=json_file_path)
             result = get_summery_from_json(json_file_path)
             data = get_json_data(json_file_path)
-            print(data)
             if data is not None:
-                json_data = DocumentData(name=json_file_name, data=data, description=re.sub(r'\*', '', result['answer']))
+                json_data = DocumentData(name=json_file_name, data=json.dumps(data), description=re.sub(r'\*', '', result['answer']))
                 json_data.save()
+                pk = json_data.id
+                print(json_data, pk)
             else:
-                print(f'data is {None}')
+                print(f'data is {data}')
         except:
             result = get_summery_from_csv(csv_path)
 
         print(csv_path)
         summary = re.sub(r'\*', '', result['answer'])
 
-        return render(request, 'app_pdf_csv_processing/output.html', {'csv_file_url': csv_file_name, 'summary':summary})
+        return render(request, 'app_pdf_csv_processing/output.html', {'csv_file_url': csv_file_name, 'summary':summary, 'json_file_url':json_file_path})
     return render(request, 'app_pdf_csv_processing/index.html')
 
 def download_csv(request, csv_file_url:str):

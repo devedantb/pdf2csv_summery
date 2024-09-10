@@ -19,3 +19,7 @@ def read_pdf(pdf_path:str, pages="all")->list[str,int]:
 # convert_pdf2csv(pdf_path='inp_pdf/NL-1.pdf', csv_path='output_csv/NL-1.csv', output_format="csv", pages="all")
 
 # PDF_Data_Organizer/pdf2csv/inp_pdf/NL-1.pdf
+
+if __name__ == '__main__':
+    # convert_pdf2csv(pdf_path='inp_pdf/Balance-Sheet-Example.pdf', csv_path='output_csv/Balance-Sheet-Example.csv', output_format="csv", pages="all")
+    tabula.convert_into('inp_pdf/Balance-Sheet-Example.pdf', 'output_csv/Balance-Sheet-Example.txt', output_format='csv', pages='all')
