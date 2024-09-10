@@ -1,5 +1,6 @@
 import os
-from dotenv import load_dotenv
+import re
+import json
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from .forms import UploadFileForm
@@ -10,6 +11,7 @@ from PDF_Data_Organizer.settings import BASE_DIR
 from pdf2csv.pdf2csv import convert_pdf2csv
 from csv2summery.csvai import llm ,load_json, load_csv, combine_documents_to_text, createVectorDB_retriever, getDocumentInsights
 from csv2summery.csv2json import make_json
+from .models import DocumentData
 
 # Create your views here.
 def get_summery_from_json(json_file_path, question:str, llm=llm):
@@ -36,7 +38,15 @@ def get_summery_from_csv(csv_file_name,question:str=None, llm=llm):
     result = getDocumentInsights(question,retriever,llm)
     return result
 
+def get_json_data(json_file_path:str):
+    with open(json_file_path, 'r') as file:
+        # Load the JSON data
+        json_data = json.load(file)
+    return json_data
+
 def index(request):
+    get_data = DocumentData.objects.all()
+    print(get_data)
     if request.method=='POST':
         pdf_file = request.FILES["files"]
         contents = pdf_file.read()
@@ -57,16 +67,23 @@ def index(request):
         try:
             make_json(csv_path, json_file_path=json_file_path)
             result = get_summery_from_json(json_file_path)
+            data = get_json_data(json_file_path)
+            print(data)
+            if data is not None:
+                json_data = DocumentData(name=json_file_name, data=data, description=re.sub(r'\*', '', result['answer']))
+                json_data.save()
+            else:
+                print(f'data is {None}')
         except:
             result = get_summery_from_csv(csv_path)
 
         print(csv_path)
-        summary = result['answer']
+        summary = re.sub(r'\*', '', result['answer'])
 
         return render(request, 'app_pdf_csv_processing/output.html', {'csv_file_url': csv_file_name, 'summary':summary})
     return render(request, 'app_pdf_csv_processing/index.html')
 
-def get_csv_and_summery(request, csv_file_url:str):
+def download_csv(request, csv_file_url:str):
     # Check if the file exists
     if not os.path.exists(csv_file_url):
         return HttpResponse('File not found.', status=404)
