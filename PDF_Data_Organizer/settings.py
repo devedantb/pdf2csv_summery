@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'app_doc_summarization',
     'tailwind',
     'theme',
-    'django_browser_reload'
+    'django_browser_reload',
+    'pdf2csv',
+    'csv2summery'
 ]
 TAILWIND_APP_NAME = 'theme'
 MIDDLEWARE = [
