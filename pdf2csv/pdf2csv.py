@@ -3,6 +3,7 @@ import tabula
 
 
 # help(tabula.read_pdf)
+#This function converts a PDF file to a CSV file and saves the output to the specified path.
 def convert_pdf2csv(pdf_path:str, csv_path:str, output_format="csv", pages="all")-> None:
     # convert PDF into CSV file
     tabula.convert_into(pdf_path, csv_path, output_format=output_format, pages=pages)

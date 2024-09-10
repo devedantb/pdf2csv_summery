@@ -1,5 +1,6 @@
 import os
 
+#This function saves the uploaded file to the specified path and returns the saved file path.
 def save_uploaded_file(file_contents:str, filename:str, UPLOAD_DIR='pdf2csv/inp_pdf')->str:
     filepath = os.path.join(UPLOAD_DIR, filename)
     with open(filepath, "wb") as f:
