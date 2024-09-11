@@ -16,10 +16,10 @@
         <form action="{% url 'index' %}" method="POST" enctype="multipart/form-data" class="space-y-4">
             {% csrf_token %}
             <div class="flex items-center justify-center w-full">
-                <label for="file-upload" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                <label for="file-upload" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-80">
                     <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16v4h10v-4M5 12h14M12 4v16m8-12l-4 4m0 0l-4-4m4 4V4"></path>
-                    </svg>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12l8-8 8 8M12 4v16"></path>
+                    </svg>                    
                     <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                     <input id="file-upload" name="files" type="file" class="hidden" multiple accept=".pdf" onchange="showFileName(this)" required>
                 </label>

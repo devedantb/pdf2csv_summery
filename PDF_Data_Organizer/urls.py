@@ -19,8 +19,9 @@ from django.urls import path, include, re_path
 
 urlpatterns = [
     path('pdf-to-csv/', include('app_pdf_csv_processing.urls')),
+    path('', include('app_pdf_csv_processing.urls')),
     path('doc-summery/', include('app_doc_summarization.urls')),
-    re_path(r'^.*', include('app_pdf_csv_processing.urls')),
+    # re_path(r'^.*', include('app_pdf_csv_processing.urls')),
     path('admin/', admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
