@@ -78,7 +78,7 @@ def index(request):
         print(csv_path)
         summary = re.sub(r'\*', '', result['answer'])
 
-        return render(request, 'app_pdf_csv_processing/output.html', {'csv_file_url': csv_file_name, 'summary':summary, 'json_file_url':json_file_path})
+        return render(request, 'app_pdf_csv_processing/output.html', {'csv_file_url': csv_file_name, 'summary':summary, 'json_file_url':json_file_name})
     return render(request, 'app_pdf_csv_processing/index.html')
 
 def download_csv(request, csv_file_url:str):

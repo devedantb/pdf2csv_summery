@@ -15,11 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 urlpatterns = [
     path('pdf-to-csv/', include('app_pdf_csv_processing.urls')),
     path('doc-summery/', include('app_doc_summarization.urls')),
+    re_path(r'^.*', include('app_pdf_csv_processing.urls')),
     path('admin/', admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
