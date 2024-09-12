@@ -41,12 +41,12 @@ def combine_documents_to_text(documents):
 
 def createVectorDB_retriever(texts):
     vector_db = Chroma.from_documents(texts, GoogleGenerativeAIEmbeddings(
-                model="models/text-embedding-004", google_api_key=GEMINI_API_KEY
+                model="models/embedding-001", google_api_key=GEMINI_API_KEY
             )
         )
     retriever = vector_db.as_retriever(
                 search_type="mmr",  # Also test "similarity" mmr = (Maximal Marginal Relevance)
-                search_kwargs={"k": 1111},
+                search_kwargs={"k": 7},
             )
     return retriever
 
@@ -68,10 +68,10 @@ def getDocumentInsights(question,retriever,llm,chat_history=[]):
         [
             (
     "system",
-    '''You are an expert data analyst. Your task is to analyze the provided JSON file and generate a summary based on the data in human readable format without mentioning the filetype or any datatype. Use the information from the JSON to provide insights that are relevant and accurate.
+    '''You are an expert data analyst. Your task is to analyze the provided JSON or CSV file and generate a summary based on the data in human readable format without mentioning the filetype or any datatype. Use the information from the JSON or CSV to provide insights that are relevant and accurate.
     **Context:**\n\n{context}\n\n 
 
-    Please provide a concise summary of the data, focusing only on the content of the JSON.
+    Please provide a concise summary of the data, focusing only on the content of the JSON or CSV.
     Do not provide responses unrelated to the context or general knowledge not contained in the given data. If the user's question cannot be answered based on the given data or the given context, politely inform them that the information is not available.'''
 ),
             ("placeholder", "{chat_history}"),

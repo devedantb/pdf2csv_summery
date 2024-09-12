@@ -70,22 +70,18 @@ def index(request):
                 json_data = DocumentData(name=json_file_name, data=json.dumps(data), description=re.sub(r'\*', '', result['answer']))
                 json_data.save()
                 pk = json_data.id
-                print(json_data, pk)
             else:
                 print(f'data is {data}')
         except:
             result = get_summery_from_csv(csv_path)
             doc_path = csv_file_name
             json_file_name = csv_file_name
-
-        print(csv_path)
         summary = re.sub(r'\*', '', result['answer'])
 
         return render(request, 'app_pdf_csv_processing/output.html', {'csv_file_url': csv_file_name, 'summary':summary, 'doc_path':doc_path})
     return render(request, 'app_pdf_csv_processing/index.html')
 
 def download_csv(request, csv_file_url:str):
-    print(csv_file_url)
     # Check if the file exists
     if not os.path.exists(csv_file_url):
         return HttpResponse('File not found.', status=404)
