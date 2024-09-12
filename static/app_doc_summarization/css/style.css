@@ -1,0 +1,14 @@
+.chat-container {
+    position: fixed; /* Fixed position */
+    bottom: 0; /* Align; to the bottom */
+    /* border-radius: 18pt !important; */
+    width:auto;
+    right: 18px;
+    left: 18px;
+    margin: auto;
+    background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+}
+
+#ai-response{
+    padding-bottom: 2rem;
+}

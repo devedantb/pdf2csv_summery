@@ -58,6 +58,7 @@ def index(request):
         os.remove(pdf_path) # removing pdf files as those are tempo
         json_file_name = str(pdf_file).replace('.pdf','.json')
         json_file_name = f'app_pdf_csv_processing/json_data/{str(json_file_name)}'
+        doc_path = json_file_name
         json_file_path = os.path.join(BASE_DIR, json_file_name)
 
         pk = 1
@@ -74,12 +75,13 @@ def index(request):
                 print(f'data is {data}')
         except:
             result = get_summery_from_csv(csv_path)
+            doc_path = csv_file_name
             json_file_name = csv_file_name
 
         print(csv_path)
         summary = re.sub(r'\*', '', result['answer'])
 
-        return render(request, 'app_pdf_csv_processing/output.html', {'csv_file_url': csv_file_name, 'summary':summary, 'json_file_url':json_file_name})
+        return render(request, 'app_pdf_csv_processing/output.html', {'csv_file_url': csv_file_name, 'summary':summary, 'doc_path':doc_path})
     return render(request, 'app_pdf_csv_processing/index.html')
 
 def download_csv(request, csv_file_url:str):

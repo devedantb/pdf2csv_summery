@@ -11,15 +11,15 @@ from langchain_core.messages import AIMessage, HumanMessage
 # replace chat history with session
 chat_history:list=[]
 
-def ask_and_get_insights(request, json_file_url=None):
+def ask_and_get_insights(request, doc_path=None):
     # print(request.method)
-    if request.method == 'POST' and json_file_url!=None:
+    if request.method == 'POST' and doc_path!=None:
         try:
-            text_json = load_json(json_file_url)
+            text_json = load_json(doc_path)
             text_json = combine_documents_to_text(text_json)
             texts = text_json
         except:
-            text_csv = load_csv(json_file_url)
+            text_csv = load_csv(doc_path)
             text_csv = combine_documents_to_text(text_csv)
             texts = text_csv
         # print('inside the POST')
@@ -31,10 +31,10 @@ def ask_and_get_insights(request, json_file_url=None):
             chat_history.append(HumanMessage(content=question))
             chat_history.append(AIMessage(content=result["answer"]))
             context = {
-                'json_file_url':json_file_url,
+                'doc_path':doc_path,
                 'question': question,
                 'answer': re.sub(r'\*', '', result['answer'])
             }
             return render(request, 'app_doc_summarization/index.html', context=context)
     print('outside the POST')
-    return render(request, 'app_doc_summarization/index.html', context={'json_file_url':json_file_url})
+    return render(request, 'app_doc_summarization/index.html', context={'doc_path':doc_path})
